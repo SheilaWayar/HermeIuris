@@ -39,8 +39,8 @@ html {
 
 body {
   margin: 0;
-  font-family: var(--font-body);
-  background-color: var(--color-cream);
+  font-family: 'Outfit', sans-serif;
+  background-color: #F4F6FA;
   color: #1a1a1a;
   text-align: left;
 }
@@ -53,112 +53,27 @@ body {
   text-align: left;
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar {
   width: 4px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #0F234444;
   border-radius: 2px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #0F234488;
 }
 
-/* Fonts */
 .font-display {
-  font-family: var(--font-display);
+  font-family: 'DM Serif Display', serif;
 }
+
 .font-mono {
-  font-family: var(--font-mono);
-}
-
-/* Navbar */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 30px;
-  background-color: var(--color-bordeaux);
-}
-.navbar ul {
-  display: flex;
-  gap: 20px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.navbar a {
-  color: var(--color-cream);
-  font-weight: 500;
-  text-decoration: none;
-}
-
-/* Hero Section */
-.hero {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 80vh;
-  text-align: center;
-  padding: 60px 20px;
-  background: linear-gradient(
-    rgba(15, 35, 66, 0.6),
-    rgba(10, 24, 48, 0.6)
-  ), url('tu-imagen.jpg') center/cover no-repeat;
-  color: var(--color-cream);
-}
-.hero h1 {
-  font-family: var(--font-display);
-  font-size: 3rem;
-  margin-bottom: 20px;
-}
-.hero p {
-  max-width: 600px;
-  margin: 0 auto 30px;
-  line-height: 1.6;
-}
-
-/* Botones */
-.btn {
-  background-color: var(--color-gold);
-  color: var(--color-bordeaux-dark);
-  padding: 12px 24px;
-  border-radius: 6px;
-  font-weight: 600;
-  margin: 10px;
-  transition: background 0.3s;
-}
-.btn:hover {
-  background-color: var(--color-gold-light);
-}
-
-/* Secciones */
-.section {
-  padding: 60px 20px;
-  text-align: center;
-}
-.section h2 {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  margin-bottom: 20px;
-}
-
-/* Responsividad */
-@media (max-width: 768px) {
-  .navbar ul {
-    flex-direction: column;
-    gap: 10px;
-  }
-  .hero h1 {
-    font-size: 2rem;
-  }
-  .hero p {
-    font-size: 1rem;
-  }
+  font-family: 'DM Mono', monospace;
 }
