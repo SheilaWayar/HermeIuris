@@ -15,8 +15,7 @@ El sitio estático/React del Hito 1 fue migrado a **PHP** aplicando:
 
 ## Prototipo en Figma
 
-<!-- Pegá acá el enlace público de tu diseño de Figma -->
-https://www.figma.com/design/XXXXXXXX
+https://www.figma.com/make/3T62CgPhX70kusOaqVlv0L/Dise%C3%B1ar-p%C3%A1gina-web-Herme-Iuris?code-node-id=0-6&p=f&t=c7JDBfcsoTWABt1R-0&fullscreen=1
 
 ## Tecnologías
 
@@ -50,11 +49,14 @@ HTML5 · CSS3 · Bootstrap 5 · JavaScript · PHP 8.x · XAMPP / Laragon · Git 
 
 ## Evidencia de funcionamiento
 
-> Agregar capturas en una carpeta `capturas/` y enlazarlas aquí:
->
-> - Servidor local ejecutándose (`http://localhost/...`)
-> - Estructura modular (header.php, nav.php, footer.php)
-> - Título dinámico en la pestaña y clase `active` en el menú
-> - Archivo `.env.example` en el repositorio
+### Servidor local ejecutándose
+![Servidor local](capturas/01-localhost.png)
 
-⚠️ El contenido del sitio es orientativo y no constituye asesoramiento legal.
+### Estructura modular (SSI)
+![Includes](capturas/02-includes.png)
+
+### Navegación dinámica (título y menú activo)
+![Título y menú](capturas/03-titulo-menu.png)
+
+### Variables de entorno
+![.env.example](capturas/04-env-example.png)
