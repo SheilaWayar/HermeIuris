@@ -1,3 +1,26 @@
+// Tema claro / oscuro (se recuerda en el navegador)
+(function () {
+    const root = document.documentElement;
+    const boton = document.getElementById('theme-toggle');
+    const etiqueta = document.getElementById('theme-label');
+
+    function aplicar(tema) {
+        root.setAttribute('data-theme', tema);
+        root.setAttribute('data-bs-theme', tema);
+        // La etiqueta indica a qué tema se va a cambiar
+        if (etiqueta) etiqueta.textContent = tema === 'dark' ? 'Tema claro' : 'Tema oscuro';
+        try { localStorage.setItem('tema', tema); } catch (e) {}
+    }
+
+    aplicar(root.getAttribute('data-theme') || 'dark');
+
+    if (boton) {
+        boton.addEventListener('click', () => {
+            aplicar(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+        });
+    }
+})();
+
 // Buscador de glosario (filtra tarjetas en el cliente)
 const buscadorGlosario = document.getElementById('buscar-termino');
 if (buscadorGlosario) {

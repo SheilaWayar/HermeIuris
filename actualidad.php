@@ -26,8 +26,8 @@ $destacados = ['Constitucional' => 8, 'Civil' => 12, 'Laboral' => 9, 'Familia' =
                     <span class="tag"><?= $cat ?></span> <small class="text-secondary ms-2"><?= $fecha ?></small>
                     <h2 class="fs-4 mt-2"><?= $titulo ?></h2>
                     <p class="text-secondary"><?= $resumen ?></p>
-                    <button class="btn btn-link p-0 fw-semibold" style="color:var(--navy)" data-bs-toggle="collapse" data-bs-target="#analisis<?= $i ?>">▾ Ver análisis jurídico</button>
-                    <div class="collapse mt-2" id="analisis<?= $i ?>"><div class="p-3 bg-light rounded small"><?= $analisis ?></div></div>
+                    <button class="btn btn-link p-0 fw-semibold" style="color:var(--gold-text)" data-bs-toggle="collapse" data-bs-target="#analisis<?= $i ?>">▾ Ver análisis jurídico</button>
+                    <div class="collapse mt-2" id="analisis<?= $i ?>"><div class="p-3 bg-body-secondary rounded small"><?= $analisis ?></div></div>
                 </article>
             <?php endforeach; ?>
         </div>

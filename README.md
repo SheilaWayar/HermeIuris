@@ -16,7 +16,7 @@ El sitio estático/React del Hito 1 fue migrado a **PHP** aplicando:
 ## Prototipo en Figma
 
 <!-- Pegá acá el enlace público de tu diseño de Figma -->
-https://www.figma.com/design/XXXXXXXX
+https://www.figma.com/make/3T62CgPhX70kusOaqVlv0L/Dise%C3%B1ar-p%C3%A1gina-web-Herme-Iuris?code-node-id=0-6&p=f&t=UlQBcwz0UFaERt7s-0&fullscreen=1
 
 ## Tecnologías
 
