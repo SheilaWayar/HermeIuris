@@ -11,7 +11,7 @@ $areas = [
     ['Comercial',      'Actividad empresarial',           $u . 'photo-1507679799987-c73779587ccf?w=600'],
     ['Familia',        'Vínculos familiares y filiación', 'https://unsplash.com/photos/HV2My97JHA0/download?force=true&w=600'],
     ['Constitucional', 'Derechos y garantías',            $u . 'photo-1589996448606-27d38c2a2bc0?w=600'],
-    ['Procesal',       'Procedimientos judiciales',      'https://unsplash.com./es/fotos/escena-del-crimen-de-halloween-de-cuerpo-en-el-suelo-y-nina-cerca-de-el-7PvU-ZShea4' ],
+    ['Procesal',       'Procedimientos judiciales',      'https://unsplash.com./es/fotos/escena-del-crimen-de-halloween-de-cuerpo-en-el-suelo-y-nina-cerca-de-el-7PvU-ZShea4'],
     ['Tributario',     'Impuestos y finanzas públicas',   $u . 'photo-1554224155-6726b3ff858f?w=600'],
     ['Consumidor',     'Defensa del consumidor',          $u . 'photo-1521737711867-e3b97375f902?w=600'],
     ['Ambiental',      'Medio ambiente y recursos',       $u . 'photo-1441974231531-c6227db76b6e?w=600'],
