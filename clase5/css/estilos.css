@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@300;400;500;600&display=swap');
+
+:root {
+    --fondo: #061230;
+    --fondo-2: #0a1a40;
+    --tarjeta: rgba(12, 28, 66, .72);
+    --borde: rgba(255, 255, 255, .14);
+    --dorado: #c9a35a;
+    --dorado-oscuro: #b08a43;
+    --texto: #ffffff;
+    --texto-suave: #c3cce0;
+    --error: #ff8f85;
+    --exito: #7ddba0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--texto);
+    background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(201, 163, 90, .12), transparent 60%),
+        linear-gradient(180deg, var(--fondo) 0%, var(--fondo-2) 100%);
+    background-attachment: fixed;
+}
+
+/* ---------- Cabecera (si usás la de clase5) ---------- */
+.cabecera {
+    background: rgba(6, 18, 48, .92);
+    border-bottom: 1px solid var(--borde);
+    padding: 1rem 1.5rem;
+}
+.cabecera h1 {
+    margin: 0 0 .5rem;
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-weight: 400;
+    font-size: 1.5rem;
+}
+.cabecera nav { display: flex; flex-wrap: wrap; gap: .5rem; }
+.cabecera a {
+    color: var(--texto-suave);
+    text-decoration: none;
+    padding: .35rem .8rem;
+    border-radius: 6px;
+}
+.cabecera a:hover, .cabecera a.activo { color: var(--dorado); }
+
+/* ---------- Contenedor ---------- */
+.contenedor, main {
+    max-width: 760px;
+    margin: 2.5rem auto;
+    padding: 0 1.25rem;
+}
+
+/* ---------- Títulos ---------- */
+h2 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    line-height: 1.15;
+    margin: 0 0 1.25rem;
+}
+h2 small {
+    display: block;
+    margin-top: .5rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--dorado);
+}
+
+a { color: var(--dorado); }
+
+/* ---------- Tarjetas ---------- */
+.tarjeta {
+    background: var(--tarjeta);
+    border: 1px solid var(--borde);
+    border-radius: 14px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(6px);
+}
+
+/* ---------- Formularios ---------- */
+label {
+    display: block;
+    margin: 1.1rem 0 .35rem;
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--dorado);
+}
+
+input[type="text"], input[type="email"], input[type="search"],
+select, textarea {
+    width: 100%;
+    padding: .8rem 1rem;
+    font: inherit;
+    color: var(--texto);
+    background: rgba(255, 255, 255, .06);
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+}
+input::placeholder, textarea::placeholder { color: #8f9bb8; }
+select option { color: #111; }
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--dorado);
+    box-shadow: 0 0 0 3px rgba(201, 163, 90, .25);
+}
+input.invalido, textarea.invalido { border-color: var(--error); }
+textarea { min-height: 140px; resize: vertical; }
+
+/* ---------- Botón dorado ---------- */
+button {
+    margin-top: 1.5rem;
+    padding: .9rem 1.8rem;
+    font: inherit;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #0a1330;
+    background: var(--dorado);
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background .2s;
+}
+button:hover { background: var(--dorado-oscuro); }
+
+/* ---------- Mensajes ---------- */
+.error-campo { margin: .3rem 0 0; font-size: .875rem; color: var(--error); }
+
+.mensaje {
+    padding: 1rem 1.2rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid;
+}
+.mensaje.exito { color: var(--exito); background: rgba(125, 219, 160, .08); border-color: rgba(125, 219, 160, .45); }
+.mensaje.error { color: var(--error);  background: rgba(255, 143, 133, .08); border-color: rgba(255, 143, 133, .45); }
+.mensaje ul { margin: .5rem 0 0 1.2rem; padding: 0; color: var(--texto); }
+
+/* ---------- Resultados de búsqueda ---------- */
+.resultados { list-style: none; padding: 0; margin: 1rem 0 0; }
+.resultados li { padding: .9rem 0; border-bottom: 1px solid var(--borde); }
+.resultados li:last-child { border-bottom: 0; }
+.resultados small { color: var(--dorado); letter-spacing: .08em; text-transform: uppercase; }
+
+/* ---------- Pie ---------- */
+.pie, footer { text-align: center; color: var(--texto-suave); font-size: .85rem; padding: 2rem 1rem; }
+
+@media (max-width: 480px) { .tarjeta { padding: 1.25rem; } }
