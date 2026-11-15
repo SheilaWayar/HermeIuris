@@ -58,3 +58,18 @@ HTML5 · CSS3 · Bootstrap 5 · JavaScript · PHP 8.x · XAMPP / Laragon · Git 
 > - Archivo `.env.example` en el repositorio
 
 ⚠️ El contenido del sitio es orientativo y no constituye asesoramiento legal.
+## Clase 5 – Procesamiento de Formularios y Seguridad Web
+
+- [Ver entrega Clase 5](./clase5)
+## TP N.º 6: Esquema relacional en MySQL
+
+- [Normalización (1FN, 2FN y 3FN)](tp6/NORMALIZACION.md)
+- [Script de creación del esquema](tp6/schema.sql)
+- [Consultas de prueba CRUD](tp6/consultas.sql)
+## TP N.º 7: Persistencia y conexión PHP-MySQL segura
+
+CRUD de temas del foro con PDO y consultas preparadas, integrado al layout del sitio.
+
+- Listado, alta, edición y baja: [admin/](admin/index.php)
+- Conexión PDO: [config/conexion.php](config/conexion.php)
+- Para correrlo: copiar `config/db_config.example.php` como `config/db_config.php` y completar la contraseña de MySQL. Antes hay que ejecutar `tp6/schema.sql` y `tp6/consultas.sql`.
