@@ -193,3 +193,31 @@ La página `cursos.php` incluye un buscador que filtra los cursos mientras el us
 - `api/buscar_cursos.php` – endpoint JSON
 - `js/buscar_cursos.js` – frontend (Fetch API y renderizado del DOM)
 - `cursos.php` – página con el buscador
+## TP10 – Refactorización a MVC y módulo con framework
+
+### Parte A: MVC nativo (PHP puro)
+Se refactorizó el módulo de cursos separando responsabilidades:
+- `app/Models/Database.php` y `app/Models/Curso.php`: conexión PDO y consultas SQL con Prepared Statements.
+- `app/Controllers/CursoController.php`: recibe la solicitud, usa el modelo y elige la vista (`index`, `detalle`, `api`).
+- `app/Views/cursos/`: vistas con el HTML (`index.php`, `detalle.php`).
+- `cursos.php`, `curso.php` y `api/buscar_cursos.php`: puntos de entrada que solo llaman al controlador.
+
+### Parte B: módulo en CodeIgniter 4
+Carpeta `hermeiuris-ci4/`. Módulo independiente de cursos:
+- Rutas (`app/Config/Routes.php`): `GET /cursos`, `GET /cursos/{id}`, `GET /api/cursos`.
+- Controlador: `app/Controllers/Cursos.php`.
+- Modelo con Query Builder: `app/Models/CursoModel.php`.
+- Vistas con layout: `app/Views/layouts/principal.php`, `app/Views/cursos/index.php` y `ver.php`.
+- API REST simple: `GET /api/cursos?q=texto` devuelve JSON.
+
+### Cómo ejecutarlo
+**Parte A:** copiar el proyecto en `htdocs` de XAMPP, iniciar Apache y MySQL, crear `config/db_config.php` con los datos de la base y abrir `http://localhost/hermeiuris-php/cursos.php`.
+
+**Parte B:**
+1. Requiere **PHP 8.2 o superior** (CodeIgniter 4.7) con las extensiones `intl`, `mbstring` y `mysqli` habilitadas.
+2. Copiar `hermeiuris-ci4/env` a `hermeiuris-ci4/.env` y completar los datos de la base.
+3. Iniciar MySQL.
+4. Desde `hermeiuris-ci4/`: `php spark serve` y abrir `http://localhost:8080/cursos`.
+
+### Despliegue
+https://hermeiuris.infinityfreeapp.com
