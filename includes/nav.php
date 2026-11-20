@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/session.php';   // define usuario_logueado() y rol_actual()
+
 // Página actual detectada automáticamente (ej: "index.php")
 $base = $base ?? '';
 $pagina_actual = basename($_SERVER['SCRIPT_NAME']);
@@ -8,6 +10,18 @@ $menu = [
     'foro.php'       => 'Foro',
     'cuenta.php'     => 'Mi Cuenta',
 ];
+
+// Enlaces de autenticación según el estado de la sesión
+if (usuario_logueado()) {
+    $menu['panel.php'] = 'Mi panel';
+    if (rol_actual() === 'admin') {
+        $menu['admin/index.php'] = 'Administración';
+    }
+    $menu['logout.php'] = 'Cerrar sesión';
+} else {
+    $menu['login.php']    = 'Ingresar';
+    $menu['registro.php'] = 'Registrarme';
+}
 ?>
 <header class="site-header sticky-top">
     <nav class="navbar navbar-expand-lg navbar-dark">
@@ -23,10 +37,10 @@ $menu = [
                 <ul class="navbar-nav gap-lg-1 align-items-lg-center">
                     <?php foreach ($menu as $archivo => $texto): ?>
                         <li class="nav-item">
-                            <a class="nav-link <?= $pagina_actual === $archivo ? 'active' : '' ?>"
+                            <a class="nav-link <?= $pagina_actual === basename($archivo) ? 'active' : '' ?>"
                                href="<?= $base . $archivo ?>"
-                               <?= $pagina_actual === $archivo ? 'aria-current="page"' : '' ?>>
-                                <?= $texto ?>
+                               <?= $pagina_actual === basename($archivo) ? 'aria-current="page"' : '' ?>>
+                                <?= htmlspecialchars($texto) ?>
                             </a>
                         </li>
                     <?php endforeach; ?>
