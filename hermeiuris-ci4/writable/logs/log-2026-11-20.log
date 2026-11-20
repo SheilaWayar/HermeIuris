@@ -1,0 +1,116 @@
+ERROR - 2026-11-20 19:53:33 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Database\MySQLi\Connection.php:210
+Stack trace:
+#0 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Database\MySQLi\Connection.php(210): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), '', 3306, '', 0)
+#1 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Database\BaseConnection.php(549): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Database\BaseConnection.php(815): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Database\BaseBuilder.php(1660): CodeIgniter\Database\BaseConnection->query('SELECT `cursos`...', Array, false)
+#4 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Model.php(256): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\BaseModel.php(676): CodeIgniter\Model->doFindAll(50, 0)
+#6 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\app\Models\CursoModel.php(29): CodeIgniter\BaseModel->findAll(50)
+#7 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\app\Controllers\Cursos.php(19): App\Models\CursoModel->buscarActivos('')
+#8 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\CodeIgniter.php(972): App\Controllers\Cursos->index()
+#9 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\CodeIgniter.php(518): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Cursos))
+#10 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#15 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Database\MySQLi\Connection.php:240
+Stack trace:
+#0 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Database\BaseConnection.php(549): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Database\BaseConnection.php(815): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Database\BaseBuilder.php(1660): CodeIgniter\Database\BaseConnection->query('SELECT `cursos`...', Array, false)
+#3 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Model.php(256): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\BaseModel.php(676): CodeIgniter\Model->doFindAll(50, 0)
+#5 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\app\Models\CursoModel.php(29): CodeIgniter\BaseModel->findAll(50)
+#6 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\app\Controllers\Cursos.php(19): App\Models\CursoModel->buscarActivos('')
+#7 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\CodeIgniter.php(972): App\Controllers\Cursos->index()
+#8 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\CodeIgniter.php(518): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Cursos))
+#9 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#14 {main}
+CRITICAL - 2026-11-20 19:53:33 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Access denied for user ''@'localhost' (using password: NO)
+[Method: GET, Route: cursos]
+in SYSTEMPATH\Database\BaseConnection.php on line 600.
+ 1 SYSTEMPATH\Database\BaseConnection.php(815): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1660): CodeIgniter\Database\BaseConnection->query('SELECT `cursos`.`id_curso`, `cursos`.`titulo`, `cursos`.`descripcion`, `cursos`.`imagen_url`, `areas_derecho`.`nombre` AS `area`
+FROM `cursos`
+LEFT JOIN `areas_derecho` ON `areas_derecho`.`id_area` = `cursos`.`id_area`
+WHERE `cursos`.`activo` = :cursos.activo:
+ORDER BY `cursos`.`titulo`
+ LIMIT 50', [...], false)
+ 3 SYSTEMPATH\Model.php(256): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(50, 0)
+ 5 APPPATH\Models\CursoModel.php(29): CodeIgniter\BaseModel->findAll(50)
+ 6 APPPATH\Controllers\Cursos.php(19): App\Models\CursoModel->buscarActivos('')
+ 7 SYSTEMPATH\CodeIgniter.php(972): App\Controllers\Cursos->index()
+ 8 SYSTEMPATH\CodeIgniter.php(518): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Cursos))
+ 9 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\hermeiuris-php\\hermeiuris-ci4\\public\\index.php')
+ERROR - 2026-11-20 19:53:43 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Database\MySQLi\Connection.php:210
+Stack trace:
+#0 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Database\MySQLi\Connection.php(210): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), '', 3306, '', 0)
+#1 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Database\BaseConnection.php(549): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Database\BaseConnection.php(815): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Database\BaseBuilder.php(1660): CodeIgniter\Database\BaseConnection->query('SELECT `cursos`...', Array, false)
+#4 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Model.php(256): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\BaseModel.php(676): CodeIgniter\Model->doFindAll(50, 0)
+#6 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\app\Models\CursoModel.php(29): CodeIgniter\BaseModel->findAll(50)
+#7 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\app\Controllers\Cursos.php(19): App\Models\CursoModel->buscarActivos('')
+#8 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\CodeIgniter.php(972): App\Controllers\Cursos->index()
+#9 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\CodeIgniter.php(518): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Cursos))
+#10 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#15 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Database\MySQLi\Connection.php:240
+Stack trace:
+#0 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Database\BaseConnection.php(549): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Database\BaseConnection.php(815): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Database\BaseBuilder.php(1660): CodeIgniter\Database\BaseConnection->query('SELECT `cursos`...', Array, false)
+#3 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Model.php(256): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\BaseModel.php(676): CodeIgniter\Model->doFindAll(50, 0)
+#5 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\app\Models\CursoModel.php(29): CodeIgniter\BaseModel->findAll(50)
+#6 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\app\Controllers\Cursos.php(19): App\Models\CursoModel->buscarActivos('')
+#7 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\CodeIgniter.php(972): App\Controllers\Cursos->index()
+#8 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\CodeIgniter.php(518): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Cursos))
+#9 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 C:\xampp\htdocs\hermeiuris-php\hermeiuris-ci4\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#14 {main}
+CRITICAL - 2026-11-20 19:53:43 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Access denied for user ''@'localhost' (using password: NO)
+[Method: GET, Route: cursos]
+in SYSTEMPATH\Database\BaseConnection.php on line 600.
+ 1 SYSTEMPATH\Database\BaseConnection.php(815): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1660): CodeIgniter\Database\BaseConnection->query('SELECT `cursos`.`id_curso`, `cursos`.`titulo`, `cursos`.`descripcion`, `cursos`.`imagen_url`, `areas_derecho`.`nombre` AS `area`
+FROM `cursos`
+LEFT JOIN `areas_derecho` ON `areas_derecho`.`id_area` = `cursos`.`id_area`
+WHERE `cursos`.`activo` = :cursos.activo:
+ORDER BY `cursos`.`titulo`
+ LIMIT 50', [...], false)
+ 3 SYSTEMPATH\Model.php(256): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(50, 0)
+ 5 APPPATH\Models\CursoModel.php(29): CodeIgniter\BaseModel->findAll(50)
+ 6 APPPATH\Controllers\Cursos.php(19): App\Models\CursoModel->buscarActivos('')
+ 7 SYSTEMPATH\CodeIgniter.php(972): App\Controllers\Cursos->index()
+ 8 SYSTEMPATH\CodeIgniter.php(518): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Cursos))
+ 9 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\hermeiuris-php\\hermeiuris-ci4\\public\\index.php')

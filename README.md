@@ -73,3 +73,123 @@ CRUD de temas del foro con PDO y consultas preparadas, integrado al layout del s
 - Listado, alta, edición y baja: [admin/](admin/index.php)
 - Conexión PDO: [config/conexion.php](config/conexion.php)
 - Para correrlo: copiar `config/db_config.example.php` como `config/db_config.php` y completar la contraseña de MySQL. Antes hay que ejecutar `tp6/schema.sql` y `tp6/consultas.sql`.
+## TP N.º 8: Manejo de Estado, Sesiones y Autenticación
+
+**Materia:** Programación Web, Unidad 4 (Programación del lado servidor, PHP)
+**Docente:** Lic. Gabriel Artaza
+**Modalidad:** Individual
+**Alumna:** [Tu nombre y apellido]
+
+### Descripción
+
+Módulo de autenticación integrado en la aplicación principal: registro de usuarios, inicio y cierre de sesión, protección de páginas y control de acceso por roles (`admin` / `usuario`), usando PHP, PDO y MySQL.
+
+### Archivos del módulo
+
+| Archivo | Función |
+|---|---|
+| `registro.php` | Alta de usuarios con validación estricta, verificación de correo único y contraseña hasheada |
+| `login.php` | Validación de credenciales y creación de la sesión |
+| `logout.php` | Cierre de sesión completo |
+| `panel.php` | Página protegida para cualquier usuario autenticado |
+| `admin/index.php` | Página protegida solo para el rol `admin` |
+| `includes/session.php` | Inicio de sesión centralizado con cookies seguras |
+| `includes/auth_guard.php` | Guardián de rutas reutilizable |
+| `includes/nav.php` | Menú que cambia según haya sesión iniciada o no |
+| `clase8/tp8.sql` | Script SQL con el rol por defecto y la asignación del administrador |
+
+### Base de datos
+
+Base: `hermeiuris`. Tablas principales del módulo:
+
+- `roles` (`id_rol`, `nombre`, `descripcion`): contiene los roles `admin` y `usuario`.
+- `usuarios` (`id_usuario`, `id_rol`, `nombre`, `apellido`, `email` único, `password_hash` VARCHAR(255), `activo`, `created_at`).
+
+### Medidas de seguridad implementadas
+
+- **Hashing de contraseñas:** `password_hash($password, PASSWORD_BCRYPT)` al registrar y `password_verify()` al iniciar sesión, según recomendaciones OWASP.
+- **Consultas preparadas (PDO)** en todas las operaciones con la base, contra inyección SQL.
+- **Prevención de XSS:** validación y saneamiento de las entradas, y escape de toda salida con `htmlspecialchars` (función `e()`).
+- **Fijación de sesión:** `session_regenerate_id(true)` al autenticar.
+- **Cookies de sesión seguras:** `httponly`, `samesite=Lax`, `secure` cuando hay HTTPS, `use_strict_mode` y `use_only_cookies`.
+- **Datos en sesión:** `$_SESSION['usuario_id']`, `$_SESSION['usuario_nombre']` y `$_SESSION['rol']`.
+- **Guardián de rutas:** si no hay sesión, redirige a `login.php?error=acceso_denegado`; si el rol no coincide, redirige a `panel.php?error=sin_permiso`.
+- **Cierre de sesión:** vacía `$_SESSION`, elimina la cookie de sesión del navegador y llama a `session_destroy()`.
+- **Mensaje genérico de error** en el login, para no revelar si falló el correo o la contraseña.
+- **Control de caché** en páginas protegidas, para que el botón "atrás" no muestre contenido tras cerrar sesión.
+
+### Cómo usar el guardián de rutas
+
+Al comienzo de cualquier página protegida, antes de imprimir HTML:
+
+    $base = '';                    // '../' si la página está en una subcarpeta
+    $rol_requerido = 'admin';      // opcional: sin esta línea basta con estar logueado
+    require_once 'includes/auth_guard.php';
+
+### Instalación y prueba local
+
+1. Instalar XAMPP, iniciar **Apache** y **MySQL** y colocar el proyecto en `C:\xampp\htdocs\hermeiuris-php`.
+2. Crear la base `hermeiuris` en phpMyAdmin (cotejamiento `utf8mb4_general_ci`) e importar los scripts SQL del proyecto.
+3. Copiar `config/db_config.example.php` como `config/db_config.php` y completar las credenciales (este archivo está en `.gitignore` y no se sube al repositorio).
+4. Abrir `http://localhost/hermeiuris-php/registro.php`.
+
+### Cómo probar el flujo
+
+1. **Registro:** crear una cuenta en `registro.php`; redirige a `login.php`. Registrar el mismo correo otra vez muestra el aviso de correo ya registrado.
+2. **Login:** iniciar sesión; redirige a `panel.php`.
+3. **Ruta protegida:** sin sesión, abrir `panel.php` redirige a `login.php?error=acceso_denegado`.
+4. **Rol admin:** para convertir una cuenta en administradora, ejecutar en phpMyAdmin el `UPDATE` de `clase8/tp8.sql` con el correo correspondiente. Un usuario común que abra `admin/index.php` es rechazado.
+5. **Logout:** el botón "Cerrar sesión" destruye la sesión y vuelve al login.
+
+### Enlaces
+
+- Repositorio: [URL de tu repositorio en GitHub]
+- Aplicación: [URL de despliegue, si corresponde]
+## TP9 – Comunicación asincrónica: buscador de cursos en tiempo real
+
+### Qué hace
+La página `cursos.php` incluye un buscador que filtra los cursos mientras el usuario escribe, sin recargar la página. Busca por título del curso o por nombre del área del derecho (tablas `cursos` y `areas_derecho`).
+
+### Cómo funciona
+1. El usuario escribe en el campo de búsqueda (`#inputBusqueda`).
+2. `js/buscar_cursos.js` captura el evento `input`, espera 300 ms desde la última tecla (debounce) y cancela la petición anterior si todavía estaba en curso (`AbortController`).
+3. Con `fetch()` y `async/await` consulta el endpoint `api/buscar_cursos.php?q=texto`.
+4. El resultado JSON se dibuja en `#resultados` creando elementos con `textContent` (no `innerHTML`), para evitar XSS.
+5. Si la petición falla, un bloque `try...catch` muestra "No se pudo completar la búsqueda" sin romper la página.
+
+### Endpoint
+`GET api/buscar_cursos.php?q=<texto>`
+
+- Respuesta: `Content-Type: application/json; charset=utf-8`
+- Usa PDO con consultas preparadas.
+- Ejemplo de respuesta:
+```json
+{
+  "total": 1,
+  "cursos": [
+    { "id": 1, "titulo": "Introducción al Derecho Civil", "area": "Civil" }
+  ]
+}
+```
+
+### Códigos de estado
+| Código | Cuándo |
+|--------|--------|
+| 200 | Búsqueda correcta (la lista puede estar vacía si no hay coincidencias) |
+| 400 | Parámetro `q` inválido o de más de 100 caracteres |
+| 405 | Método distinto de GET |
+| 500 | Error de base de datos o de configuración |
+
+### Cómo probarlo
+1. Iniciar Apache y MySQL en XAMPP y verificar que la tabla `cursos` tenga datos.
+2. Abrir en el navegador:
+   - `http://localhost/hermeiuris-php/api/buscar_cursos.php` → JSON con todos los cursos.
+   - `http://localhost/hermeiuris-php/api/buscar_cursos.php?q=civil` → JSON filtrado.
+   - `http://localhost/hermeiuris-php/api/buscar_cursos.php?q[]=x` → error 400.
+3. Abrir `http://localhost/hermeiuris-php/cursos.php`, escribir en el buscador y observar en F12 → Network las peticiones `buscar_cursos.php?q=...` con estado 200.
+4. Detener MySQL y escribir en el buscador: debe aparecer el mensaje de error en rojo.
+
+### Archivos del TP
+- `api/buscar_cursos.php` – endpoint JSON
+- `js/buscar_cursos.js` – frontend (Fetch API y renderizado del DOM)
+- `cursos.php` – página con el buscador

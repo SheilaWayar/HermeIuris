@@ -1,4 +1,7 @@
 <?php
+// Sesión centralizada (TP8): define usuario_logueado() y rol_actual()
+require_once __DIR__ . '/includes/session.php';
+
 $titulo_pagina = "Inicio";
 require_once 'includes/header.php';
 
@@ -10,8 +13,8 @@ $areas = [
     ['Laboral',        'Derechos del trabajador',         $u . 'photo-1521790361543-f645cf042ec4?w=600'],
     ['Comercial',      'Actividad empresarial',           $u . 'photo-1507679799987-c73779587ccf?w=600'],
     ['Familia',        'Vínculos familiares y filiación', 'https://unsplash.com/photos/HV2My97JHA0/download?force=true&w=600'],
-    ['Constitucional', 'Derechos y garantías',            $u . 'photo-1589996448606-27d38c2a2bc0?w=600'],
-    ['Procesal',       'Procedimientos judiciales',      'https://unsplash.com./es/fotos/escena-del-crimen-de-halloween-de-cuerpo-en-el-suelo-y-nina-cerca-de-el-7PvU-ZShea4'],
+    ['Constitucional', 'Derechos y garantías',            'https://unsplash.com/photos/CRJAD7e9RVc/download?force=true&w=600'],
+    ['Procesal',       'Procedimientos judiciales',       'https://unsplash.com/photos/J5TYAxwQoM8/download?force=true&w=600'],
     ['Tributario',     'Impuestos y finanzas públicas',   $u . 'photo-1554224155-6726b3ff858f?w=600'],
     ['Consumidor',     'Defensa del consumidor',          $u . 'photo-1521737711867-e3b97375f902?w=600'],
     ['Ambiental',      'Medio ambiente y recursos',       $u . 'photo-1441974231531-c6227db76b6e?w=600'],
@@ -52,29 +55,68 @@ $glosario = [
     <section class="container-xxl py-5">
         <div class="row g-4">
 
-            <!-- Columna izquierda: Mi Cuenta -->
-            <aside class="col-xl-3 order-2 order-xl-1" aria-label="Mi cuenta">
+            <!-- Columna izquierda: Mi Cuenta (conectada al módulo de autenticación del TP8) -->
+            <aside class="col-xl-3 order-2 order-xl-1" aria-label="Mi cuenta" id="mi-cuenta">
                 <div class="panel">
                     <div class="panel-head"><h2 class="fs-5 mb-0">Mi Cuenta</h2></div>
                     <div class="p-3">
+
+                    <?php if (usuario_logueado()): ?>
+                        <!-- Usuario con sesión iniciada -->
+                        <p class="mb-1">Hola, <strong><?= e($_SESSION['usuario_nombre']) ?></strong>.</p>
+                        <p class="small mb-3">Rol: <span class="tag"><?= e($_SESSION['rol']) ?></span></p>
+                        <div class="d-grid gap-2">
+                            <a href="panel.php" class="btn btn-navy py-2">Ir a mi panel</a>
+                            <?php if (rol_actual() === 'admin'): ?>
+                                <a href="admin/index.php" class="btn btn-gold py-2">Administración</a>
+                            <?php endif; ?>
+                            <a href="logout.php" class="btn btn-outline-secondary py-2">Cerrar sesión</a>
+                        </div>
+
+                    <?php else: ?>
+                        <!-- Visitante: pestañas Ingresar / Registrarse -->
                         <ul class="nav nav-pills nav-fill mb-3 pills-cuenta" role="tablist">
                             <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#home-ingresar" type="button">Ingresar</button></li>
                             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#home-registro" type="button">Registrarse</button></li>
                         </ul>
                         <div class="tab-content">
-                            <form class="tab-pane fade show active d-grid gap-3" id="home-ingresar">
-                                <input class="form-control" placeholder="Email o teléfono" aria-label="Email o teléfono">
-                                <input class="form-control" type="password" placeholder="Contraseña" aria-label="Contraseña">
-                                <button type="button" class="btn btn-navy py-2">Acceder</button>
+
+                            <!-- INGRESAR: envía a login.php -->
+                            <form class="tab-pane fade show active d-grid gap-3" id="home-ingresar"
+                                  method="post" action="login.php">
+                                <input class="form-control" type="email" name="email" maxlength="120"
+                                       placeholder="Correo electrónico" aria-label="Correo electrónico"
+                                       autocomplete="email" required>
+                                <input class="form-control" type="password" name="password" maxlength="72"
+                                       placeholder="Contraseña" aria-label="Contraseña"
+                                       autocomplete="current-password" required>
+                                <button type="submit" class="btn btn-navy py-2">Acceder</button>
                                 <a href="cuenta.php" class="small text-center" style="color:var(--gold-text)">¿Olvidaste tu contraseña?</a>
                             </form>
-                            <form class="tab-pane fade d-grid gap-3" id="home-registro">
-                                <input class="form-control" placeholder="Nombre completo" aria-label="Nombre completo">
-                                <input class="form-control" type="email" placeholder="Email" aria-label="Email">
-                                <input class="form-control" type="password" placeholder="Contraseña" aria-label="Contraseña">
-                                <button type="button" class="btn btn-navy py-2">Crear cuenta</button>
+
+                            <!-- REGISTRARSE: envía a registro.php -->
+                            <form class="tab-pane fade d-grid gap-3" id="home-registro"
+                                  method="post" action="registro.php">
+                                <input class="form-control" type="text" name="nombre" maxlength="60"
+                                       placeholder="Nombre" aria-label="Nombre" required>
+                                <input class="form-control" type="text" name="apellido" maxlength="60"
+                                       placeholder="Apellido" aria-label="Apellido" required>
+                                <input class="form-control" type="email" name="email" maxlength="120"
+                                       placeholder="Correo electrónico" aria-label="Correo electrónico"
+                                       autocomplete="email" required>
+                                <input class="form-control" type="password" name="password"
+                                       minlength="8" maxlength="72"
+                                       placeholder="Contraseña (8 o más, con letra y número)" aria-label="Contraseña"
+                                       autocomplete="new-password" required>
+                                <input class="form-control" type="password" name="confirmar"
+                                       minlength="8" maxlength="72"
+                                       placeholder="Repetí la contraseña" aria-label="Repetí la contraseña"
+                                       autocomplete="new-password" required>
+                                <button type="submit" class="btn btn-navy py-2">Crear cuenta</button>
                             </form>
                         </div>
+                    <?php endif; ?>
+
                     </div>
                 </div>
             </aside>
