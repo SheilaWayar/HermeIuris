@@ -1,7 +1,8 @@
 <?php
-// LOGIN: validación con password_verify y sesión segura
+// LOGIN: validación con password_verify, sesión segura e historial de accesos
 require_once __DIR__ . '/config/conexion.php';
 require_once __DIR__ . '/includes/session.php';   // ejecuta session_start()
+require_once __DIR__ . '/includes/historial.php';
 
 if (usuario_logueado()) {
     header('Location: panel.php');
@@ -59,6 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['usuario_nombre'] = $usuario['nombre'];
             $_SESSION['rol']            = $usuario['rol'];
 
+            registrar_evento($pdo, (int) $usuario['id_usuario'], 'login');
+
             // Si el algoritmo de hash mejoró desde el registro, se actualiza el hash guardado
             if (password_needs_rehash($usuario['password_hash'], PASSWORD_BCRYPT)) {
                 $stmt = $pdo->prepare('UPDATE usuarios SET password_hash = :hash WHERE id_usuario = :id');
@@ -70,6 +73,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             header('Location: ' . ($usuario['rol'] === 'admin' ? 'admin/index.php' : 'panel.php'));
             exit;
+        }
+
+        // Intento fallido de una cuenta existente: queda en su historial
+        if ($usuario) {
+            registrar_evento($pdo, (int) $usuario['id_usuario'], 'login_fallido');
         }
 
         // Mensaje genérico: no dice si falló el correo o la contraseña

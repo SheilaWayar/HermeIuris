@@ -1,7 +1,10 @@
 <?php
-// READ: listado de temas del foro (con INNER JOIN a usuarios y categorías)
-require_once '../config/conexion.php';
-require_once '../includes/helpers.php';
+// ADMIN > Temas del foro (listado con INNER JOIN a usuarios y categorías)
+$base = '../';
+$rol_requerido = 'admin';
+require_once __DIR__ . '/../includes/auth_guard.php';   // 🔒 sesión + rol admin
+require_once __DIR__ . '/../config/conexion.php';
+require_once __DIR__ . '/../includes/helpers.php';
 
 // Mensajes posibles (lista blanca: nunca se imprime lo que llega por la URL)
 $mensajes = [
@@ -37,10 +40,11 @@ $stmt->execute($params);
 $temas = $stmt->fetchAll();
 
 $titulo_pagina = 'Administración de temas del foro';
-$base = '../';
-require_once '../includes/header.php';
+require_once __DIR__ . '/../includes/header.php';
 ?>
 <main class="container py-5">
+    <?php require __DIR__ . '/_nav.php'; ?>
+
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
         <h1 class="titulo-dorado h2 mb-0">Administración del foro</h1>
         <a href="crear.php" class="btn btn-gold">+ Nuevo tema</a>
@@ -114,4 +118,4 @@ require_once '../includes/header.php';
         </table>
     </div>
 </main>
-<?php require_once '../includes/footer.php'; ?>
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>

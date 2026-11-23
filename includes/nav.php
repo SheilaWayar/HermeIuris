@@ -11,16 +11,14 @@ $menu = [
     'cuenta.php'     => 'Mi Cuenta',
 ];
 
-// Enlaces de autenticación según el estado de la sesión
+// Ingresar y Registrarme viven dentro de "Mi Cuenta" (cuenta.php),
+// por eso ya no aparecen en el menú. Con sesión iniciada se agregan los accesos de usuario.
 if (usuario_logueado()) {
     $menu['panel.php'] = 'Mi panel';
     if (rol_actual() === 'admin') {
         $menu['admin/index.php'] = 'Administración';
     }
     $menu['logout.php'] = 'Cerrar sesión';
-} else {
-    $menu['login.php']    = 'Ingresar';
-    $menu['registro.php'] = 'Registrarme';
 }
 ?>
 <header class="site-header sticky-top">

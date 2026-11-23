@@ -1,7 +1,9 @@
 <?php
-// REGISTRO: alta de usuario con contraseña hasheada (bcrypt) y consultas preparadas
+// REGISTRO: alta de usuario con datos personales (nombre, apellido, DNI, email),
+// contraseña hasheada (bcrypt) y consultas preparadas
 require_once __DIR__ . '/config/conexion.php';
 require_once __DIR__ . '/includes/session.php';
+require_once __DIR__ . '/includes/historial.php';
 
 if (usuario_logueado()) {
     header('Location: panel.php');
@@ -9,19 +11,21 @@ if (usuario_logueado()) {
 }
 
 $errores = [];
-$datos = ['nombre' => '', 'apellido' => '', 'email' => ''];
+$datos = ['nombre' => '', 'apellido' => '', 'dni' => '', 'email' => ''];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $datos['nombre']   = post_texto('nombre');
     $datos['apellido'] = post_texto('apellido');
     $datos['email']    = mb_strtolower(post_texto('email'));
+    // DNI: se aceptan puntos o espacios al escribirlo, pero se guarda solo con dígitos
+    $datos['dni']      = preg_replace('/\D/', '', post_texto('dni'));
 
     // Las contraseñas NO se recortan (trim): los espacios pueden ser parte de la clave
     $password  = (isset($_POST['password']) && is_string($_POST['password'])) ? $_POST['password'] : '';
     $confirmar = (isset($_POST['confirmar']) && is_string($_POST['confirmar'])) ? $_POST['confirmar'] : '';
 
     // --- Validación estricta ---
-    $patron_nombre = "/^[\p{L}][\p{L}\s'.\-]*$/u";   // letras, espacios, apóstrofe, punto y guion
+    $patron_nombre = "/^[\p{L}][\p{L}\s'.\-]*$/u";
 
     foreach (['nombre' => 'El nombre', 'apellido' => 'El apellido'] as $campo => $etiqueta) {
         $largo = mb_strlen($datos[$campo]);
@@ -32,11 +36,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    if (!preg_match('/^\d{7,8}$/', $datos['dni'])) {
+        $errores['dni'] = 'Ingresá un DNI válido (7 u 8 dígitos).';
+    }
+
     if (mb_strlen($datos['email']) > 120 || !filter_var($datos['email'], FILTER_VALIDATE_EMAIL)) {
         $errores['email'] = 'Ingresá un correo electrónico válido.';
     }
 
-    // bcrypt solo usa los primeros 72 bytes de la clave
     if (strlen($password) < 8 || strlen($password) > 72) {
         $errores['password'] = 'La contraseña debe tener entre 8 y 72 caracteres.';
     } elseif (!preg_match('/[A-Za-z]/', $password) || !preg_match('/\d/', $password)) {
@@ -47,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errores['confirmar'] = 'Las contraseñas no coinciden.';
     }
 
-    // --- El correo no puede existir previamente ---
+    // --- El correo y el DNI no pueden existir previamente ---
     if (!isset($errores['email'])) {
         $stmt = $pdo->prepare('SELECT id_usuario FROM usuarios WHERE email = :email LIMIT 1');
         $stmt->execute([':email' => $datos['email']]);
@@ -55,10 +62,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errores['email'] = 'Ese correo ya está registrado.';
         }
     }
+    if (!isset($errores['dni'])) {
+        $stmt = $pdo->prepare('SELECT id_usuario FROM usuarios WHERE dni = :dni LIMIT 1');
+        $stmt->execute([':dni' => $datos['dni']]);
+        if ($stmt->fetch()) {
+            $errores['dni'] = 'Ese DNI ya está registrado.';
+        }
+    }
 
     // --- Alta ---
     if (!$errores) {
-        // Todo registro público recibe el rol 'usuario' (el admin se asigna a mano en la base)
         $stmt = $pdo->prepare('SELECT id_rol FROM roles WHERE nombre = :nombre LIMIT 1');
         $stmt->execute([':nombre' => 'usuario']);
         $rol = $stmt->fetch();
@@ -70,23 +83,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             try {
                 $stmt = $pdo->prepare(
-                    'INSERT INTO usuarios (id_rol, nombre, apellido, email, password_hash)
-                     VALUES (:id_rol, :nombre, :apellido, :email, :password_hash)'
+                    'INSERT INTO usuarios (id_rol, nombre, apellido, dni, email, password_hash)
+                     VALUES (:id_rol, :nombre, :apellido, :dni, :email, :password_hash)'
                 );
                 $stmt->execute([
                     ':id_rol'        => $rol['id_rol'],
                     ':nombre'        => $datos['nombre'],
                     ':apellido'      => $datos['apellido'],
+                    ':dni'           => $datos['dni'],
                     ':email'         => $datos['email'],
                     ':password_hash' => $hash,
                 ]);
 
+                registrar_evento($pdo, (int) $pdo->lastInsertId(), 'registro');
+
                 header('Location: login.php?status=registrado');
                 exit;
             } catch (PDOException $e) {
-                // 1062 = clave duplicada (dos registros simultáneos con el mismo correo)
+                // 1062 = clave duplicada (dos registros simultáneos con el mismo correo o DNI)
                 if (isset($e->errorInfo[1]) && (int) $e->errorInfo[1] === 1062) {
-                    $errores['email'] = 'Ese correo ya está registrado.';
+                    $errores['email'] = 'El correo o el DNI ya están registrados.';
                 } else {
                     error_log('Error en registro: ' . $e->getMessage());
                     $errores['general'] = 'No se pudo completar el registro. Intentá de nuevo.';
@@ -129,6 +145,15 @@ require_once 'includes/header.php';
                                class="form-control <?= isset($errores['apellido']) ? 'is-invalid' : '' ?>"
                                value="<?= e($datos['apellido']) ?>">
                     </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="dni" class="form-label">DNI</label>
+                    <input type="text" id="dni" name="dni" maxlength="10" required inputmode="numeric"
+                           autocomplete="off"
+                           class="form-control <?= isset($errores['dni']) ? 'is-invalid' : '' ?>"
+                           value="<?= e($datos['dni']) ?>">
+                    <div class="form-text">Sin puntos ni espacios. Solo lo ve la administración del sitio.</div>
                 </div>
 
                 <div class="mb-3">

@@ -1,6 +1,13 @@
 <?php
-// LOGOUT: destruye la sesión por completo
+// LOGOUT: registra el evento y destruye la sesión por completo
+require_once __DIR__ . '/config/conexion.php';
 require_once __DIR__ . '/includes/session.php';
+require_once __DIR__ . '/includes/historial.php';
+
+// 0) Dejar constancia en el historial (antes de vaciar la sesión)
+if (usuario_logueado()) {
+    registrar_evento($pdo, (int) $_SESSION['usuario_id'], 'logout');
+}
 
 // 1) Vaciar las variables de sesión
 $_SESSION = [];

@@ -5,6 +5,9 @@ require_once __DIR__ . '/includes/session.php';
 $titulo_pagina = "Inicio";
 require_once 'includes/header.php';
 
+// Nombre del archivo del chatbot (cambialo acá si lo renombraste distinto)
+$pagina_chatbot = 'consultas.php';
+
 // Áreas del derecho: [nombre, descripción corta, URL de la foto ('' = fondo degradado)]
 $u = 'https://images.unsplash.com/';
 $areas = [
@@ -25,7 +28,7 @@ $accesos = [
     ['📰', 'Últimas noticias', 'Fallos y análisis recientes', 'actualidad.php'],
     ['💬', 'Foro de debate',   'Participá en la discusión',   'foro.php'],
     ['📚', 'Cursos gratuitos', 'Aprendé sobre tus derechos',  'cursos.php'],
-    ['🤖', 'Chatbot legal',    'Consultá dudas al instante',  'chatbot.php'],
+    ['🤖', 'Chatbot legal',    'Consultá dudas al instante',  $pagina_chatbot],
 ];
 
 $glosario = [
@@ -46,7 +49,7 @@ $glosario = [
                 <h1 class="mb-4"><?= htmlspecialchars($nombre_sitio) ?> es un espacio donde el derecho deja de ser un lenguaje inaccesible y se convierte en una herramienta para comprender la vida en comunidad.</h1>
                 <p class="mb-4 lead">Aquí no importa si sos abogado o ciudadano común: todos tienen derecho a entender cómo las leyes impactan en nuestra sociedad. Queremos que te sientas acompañado, identificado y con voz en cada debate.</p>
                 <a href="actualidad.php" class="btn btn-gold px-4 py-2 me-2">Ver actualidad</a>
-                <a href="chatbot.php" class="btn btn-outline-light px-4 py-2 text-uppercase fw-semibold" style="font-size:.8rem">Consultar al chatbot</a>
+                <a href="<?= $pagina_chatbot ?>" class="btn btn-outline-light px-4 py-2 text-uppercase fw-semibold" style="font-size:.8rem">Consultar al chatbot</a>
             </div>
         </div>
     </section>
@@ -55,7 +58,7 @@ $glosario = [
     <section class="container-xxl py-5">
         <div class="row g-4">
 
-            <!-- Columna izquierda: Mi Cuenta (conectada al módulo de autenticación del TP8) -->
+            <!-- Columna izquierda: Mi Cuenta (el ingreso y el registro viven en cuenta.php) -->
             <aside class="col-xl-3 order-2 order-xl-1" aria-label="Mi cuenta" id="mi-cuenta">
                 <div class="panel">
                     <div class="panel-head"><h2 class="fs-5 mb-0">Mi Cuenta</h2></div>
@@ -74,47 +77,9 @@ $glosario = [
                         </div>
 
                     <?php else: ?>
-                        <!-- Visitante: pestañas Ingresar / Registrarse -->
-                        <ul class="nav nav-pills nav-fill mb-3 pills-cuenta" role="tablist">
-                            <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#home-ingresar" type="button">Ingresar</button></li>
-                            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#home-registro" type="button">Registrarse</button></li>
-                        </ul>
-                        <div class="tab-content">
-
-                            <!-- INGRESAR: envía a login.php -->
-                            <form class="tab-pane fade show active d-grid gap-3" id="home-ingresar"
-                                  method="post" action="login.php">
-                                <input class="form-control" type="email" name="email" maxlength="120"
-                                       placeholder="Correo electrónico" aria-label="Correo electrónico"
-                                       autocomplete="email" required>
-                                <input class="form-control" type="password" name="password" maxlength="72"
-                                       placeholder="Contraseña" aria-label="Contraseña"
-                                       autocomplete="current-password" required>
-                                <button type="submit" class="btn btn-navy py-2">Acceder</button>
-                                <a href="cuenta.php" class="small text-center" style="color:var(--gold-text)">¿Olvidaste tu contraseña?</a>
-                            </form>
-
-                            <!-- REGISTRARSE: envía a registro.php -->
-                            <form class="tab-pane fade d-grid gap-3" id="home-registro"
-                                  method="post" action="registro.php">
-                                <input class="form-control" type="text" name="nombre" maxlength="60"
-                                       placeholder="Nombre" aria-label="Nombre" required>
-                                <input class="form-control" type="text" name="apellido" maxlength="60"
-                                       placeholder="Apellido" aria-label="Apellido" required>
-                                <input class="form-control" type="email" name="email" maxlength="120"
-                                       placeholder="Correo electrónico" aria-label="Correo electrónico"
-                                       autocomplete="email" required>
-                                <input class="form-control" type="password" name="password"
-                                       minlength="8" maxlength="72"
-                                       placeholder="Contraseña (8 o más, con letra y número)" aria-label="Contraseña"
-                                       autocomplete="new-password" required>
-                                <input class="form-control" type="password" name="confirmar"
-                                       minlength="8" maxlength="72"
-                                       placeholder="Repetí la contraseña" aria-label="Repetí la contraseña"
-                                       autocomplete="new-password" required>
-                                <button type="submit" class="btn btn-navy py-2">Crear cuenta</button>
-                            </form>
-                        </div>
+                        <!-- Visitante: todo el ingreso y registro está en Mi Cuenta -->
+                        <p class="small mb-3">Ingresá o creá tu cuenta para participar en el foro y acceder a tu panel.</p>
+                        <a href="cuenta.php" class="btn btn-navy py-2 d-block">Ingresar o registrarme</a>
                     <?php endif; ?>
 
                     </div>
@@ -127,7 +92,8 @@ $glosario = [
                 <div class="row g-3 mb-4">
                     <?php foreach ($areas as [$nombre, $desc, $foto]): ?>
                         <div class="col-6 col-md-3">
-                            <a href="terminologia.php" class="area-foto text-decoration-none">
+                            <!-- Cada área lleva a la jurisprudencia de su categoría -->
+                            <a href="jurisprudencia.php?area=<?= urlencode($nombre) ?>" class="area-foto text-decoration-none">
                                 <div class="area-img" style="background-image: <?= $foto ? "url('" . htmlspecialchars($foto) . "'), " : '' ?>linear-gradient(135deg, #2a4a7c, #0F2342);">
                                     <span class="area-nombre"><?= htmlspecialchars($nombre) ?></span>
                                 </div>
