@@ -15,7 +15,6 @@ El sitio estático/React del Hito 1 fue migrado a **PHP** aplicando:
 
 ## Prototipo en Figma
 
-<!-- Pegá acá el enlace público de tu diseño de Figma -->
 https://www.figma.com/make/3T62CgPhX70kusOaqVlv0L/Dise%C3%B1ar-p%C3%A1gina-web-Herme-Iuris?code-node-id=0-6&p=f&t=UlQBcwz0UFaERt7s-0&fullscreen=1
 
 ## Tecnologías
@@ -78,7 +77,7 @@ CRUD de temas del foro con PDO y consultas preparadas, integrado al layout del s
 **Materia:** Programación Web, Unidad 4 (Programación del lado servidor, PHP)
 **Docente:** Lic. Gabriel Artaza
 **Modalidad:** Individual
-**Alumna:** [Tu nombre y apellido]
+**Alumna:** Lamas Wayar Sheila Sabrina
 
 ### Descripción
 
@@ -141,10 +140,6 @@ Al comienzo de cualquier página protegida, antes de imprimir HTML:
 4. **Rol admin:** para convertir una cuenta en administradora, ejecutar en phpMyAdmin el `UPDATE` de `clase8/tp8.sql` con el correo correspondiente. Un usuario común que abra `admin/index.php` es rechazado.
 5. **Logout:** el botón "Cerrar sesión" destruye la sesión y vuelve al login.
 
-### Enlaces
-
-- Repositorio: [URL de tu repositorio en GitHub]
-- Aplicación: [URL de despliegue, si corresponde]
 ## TP9 – Comunicación asincrónica: buscador de cursos en tiempo real
 
 ### Qué hace
